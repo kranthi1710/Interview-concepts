@@ -1,0 +1,183 @@
+//Debouncing:
+
+In order to make API call delay for sometime
+Suppose we have a search text and for every keyup, if we are making a API call, it can be a performace issue. In order to reduce this API calls on every keyup, we make use of Debouncing concept.
+Only make an API call when the difference of time between the two key press events is greater than 300ms.
+
+
+
+// Call, Apply and Bind
+
+
+Using call method, we can do function borrowing from one object to another object.
+
+first argument in call method will be reference or ref to what we want "this" keyword pointing to(ex: Object/Function/window)
+
+//call method
+const obj1 = {
+    name:"kkr",
+    city:"Gadwal"
+}
+
+const printFullName= function(town,state,country){
+        return `${this.name} from ${this.city} and ${town} and ${state} and ${country}`; 
+    }
+console.log(printFullName.call(obj1,"hjkgjhhjsa","hasjkshbjs","hjbsds"));
+
+const obj2={
+    name:"kishor",
+    city:"duisburg"
+}
+// we can call a "call" function/method on the methods inside another objects, and we can pass reference to 
+console.log(printFullName.call(obj2,"kksjdjs","hasjkshbjs","hjbsds"));
+
+
+//Bind method will create a copy of function/method and we can invoke it later . Call will directly invoke a method/function .
+
+let printMyName = printFullName.bind(obj2,"kksjdjs","hasjkshbjs","hjbsds");
+console.log(printMyName());
+
+
+// Call()---Used to invoke a function directly by passing in the reference which points to the "this" variable inside the method.
+
+// Apply() -- It is same like call method but only difference is, it takes the second argument as the Array list of the parameters which needs to be passed to function which we do apply
+// Bind() --This method does not directly invoke the method but gives you the copy of the exactly same method which can be invoked later.
+
+
+
+Poyfill---It is like a Browser fallback. Suppose if our Browser does not have a bind function, and we have to write our own bind function.
+
+
+//Bind Example
+let name = {
+    firstname: "kranthi",
+    lastname: "reddy"
+}
+
+function printName(hometown,country) {
+    console.log(`Name is ${this.firstname} ${this.lastname} from ${hometown} in ${country}`);
+}
+
+// let printMyName = printName.bind(name);
+// printMyName();
+
+
+// Bind Polyfill
+Function.prototype.mybind = function(...args){
+    //when ever we invoke the printMyName function, it invokes mybind function which is again invoking to the function which it is binded to. so we store this(which is printName function) in a variable
+    let obj = this;// this refers to the function which bind method is binded to
+    //This slice(1) will remove the first element in the array and returns the array of remaining elements 
+    let params = args.slice(1);
+    console.log(params);
+    return function(...args2){
+        // Here obj->this->printName() is calling name object. call immediately invokes the object/function 
+        //args[0] returns the first argument i.e name object
+        obj.apply(args[0],[params,args2]);
+    }
+}
+
+let printMyName = printName.mybind(name,"Kurnool");
+printMyName("India");
+
+
+
+/// Bind from scratch
+
+Function.prototype.mybind = function(context,...args){
+    //we can use globalThis if we are not sure which environment we are on. It means On the web you can use window, self, or frames - but in Web Workers only self will work. In Node.js none of these work, and you must instead use global.The globalThis property provides a standard way of accessing the global 'this' value (and hence the global object itself) across environments. Unlike similar properties such as window and self, it's guaranteed to work in window and non-window contexts. In this way, you can access the global object in a consistent manner without having to know which environment the code is being run in. To help you remember the name, just remember that in global scope the this value is globalThis.
+   let currContext = context || globalThis;
+   //Symbol() ensures that new method won't override existing methods of currentContext.
+   let newProp = Symbol();
+   //this refers to the printName function but not invoked , we are assigning to the newProperty created in currContext(i.e in Global Object/Window)
+   currContext[newProp]=this;
+   return function(...outerargs){
+       //Here we are invoking the function by ()
+       let result = currContext[newProp](...args,...outerargs);
+       delete currContext[newProp];
+       return result;
+   }
+}
+
+let printMyName = printName.mybind(name,"Kurnool");
+printMyName("India");
+
+
+//Call 
+
+let name = {
+    firstname: "kranthi",
+    lastname: "reddy"
+}
+
+function printName(hometown,country) {
+    console.log(`Name is ${this.firstname} ${this.lastname} from ${hometown} in ${country}`);
+}
+
+let name2={
+    firstname:"kishor",
+    lastname:"Reddy"
+}
+  
+ printName.call(name2,"x","y","z");
+ printName.call(name,"x","y","z");
+ 
+//  printName.apply(name2,["x","y","z"]);
+//  printName.apply(name,["x","y","z"]);
+ 
+ //Polyfill for call method from scratch
+ Function.prototype.mycall = function(context,...args){
+     //context is the first argument, if no argument is passed, assign it to a global window object
+     let currContext = context || globalThis;
+     //Symbol() ensures that new method doesnot override the existing methods in currentContext
+     let newProp = Symbol();
+     currContext[newProp] = this; //assigning this(printName) to the newProp of current context.
+     let result = currContext[newProp](...args);
+     delete currContext[newProp];
+     return result;
+ }
+ 
+ printName.mycall(name2,"x","y","z");
+ printName.mycall(name,"x","y","z");
+
+
+//APPLY
+let name = {
+    firstname: "kranthi",
+    lastname: "reddy"
+}
+
+function printName(hometown,country) {
+    console.log(`Name is ${this.firstname} ${this.lastname} from ${hometown} in ${country}`);
+}
+
+let name2={
+    firstname:"kishor",
+    lastname:"Reddy"
+}
+  
+//  printName.call(name2,"x","y","z");
+//  printName.call(name,"x","y","z");
+ 
+ printName.apply(name2,["x","y","z"]);
+ printName.apply(name,["x","y","z"]);
+ 
+ //Polyfill for call method from scratch
+ Function.prototype.myapply = function(context,args=[]){
+     if(!Array.isArray(args)){
+         throw new Error("Reminder, apply method takes array of arguments (2nd to nth)");
+     }
+     //context is the first argument, if no argument is passed, assign it to a global window object
+     let currContext = context || globalThis;
+     //Symbol() ensures that new method doesnot override the existing methods in currentContext
+     let newProp = Symbol();
+     currContext[newProp] = this; //assigning this(printName) to the newProp of current context.
+     let result = currContext[newProp](...args);
+     delete currContext[newProp];
+     return result;
+ }
+ 
+ printName.myapply(name2,["x","y","z"]);
+ printName.myapply(name,["x","y","z"]);
+
+
+

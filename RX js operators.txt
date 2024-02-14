@@ -1,0 +1,238 @@
+Of Operator:
+We can make Observable from a string or array or object.
+We can make use of it whenever we have a input of string/array/Object and need an output in the form of Observable.
+
+ex: 
+viewersList = ["k","m","n"];
+viewers$: Observable<string[]>=of(this.viewersList);
+
+ngOnInit(){
+this.viewers$.subscribe(data=>console.log(data));
+}
+
+
+From Operator:
+ whenever you have a plain array/Promise/an iterable Object/an Observable like Object as an input and you want to get observable out of it, we can use this operator.
+ //Remember it will always take Array or Array like in from Operator
+ 
+ ordersArr = ["k","m","n"];
+ orders$: Observable<string> = from(this.ordersArr);
+ 
+ ngOnInit(){
+ this.orders$.subscribe(data=>{
+ setInterval(()=>{
+ console.log(data);
+ },3000);
+ }
+ }
+ 
+ 
+ Difference between Of Operator and From Operator:
+ of takes string/array/Object type as input but from takes only Array or Array like as input but both returns Observable.
+ 
+
+/////////////////////////////////////////fromEvent Operator:///////////////////////////////////
+It is an Observable creation operator---IMP
+Creates an Observable that emits events of specific type(click,focus,mouseover,keyup,blur etc) coming from the given event target (input/select etc)
+-We can bind target elements and methods to make sure,we get Observable as output
+-Angular specific -> we will use viewChild, NativeElement as target element and bind events.
+
+Example:
+In html:
+<button #validate  (click)="getOutputObservable()">
+Click for Observable
+</button>
+<a href="http://.." #getLink (mouseover)="getEventObservable()">
+Root Link
+</a>
+
+In Ts:
+//If we have to get multiple elements, we use viewChildren
+@viewChild('validate')
+getData: ElementRef;
+
+@viewChild('getLink')
+getLinkData: ElementRef;
+
+
+
+getOutputObservable(){
+const items$: Observable=fromEvent(this.getData?.nativeElement,"click");
+items$.subscribe(res=>{
+console.log(res.target.value);
+})
+}
+
+getEventObservable(){
+const linkObservable$: Observable=fromEvent(this.getLinkData?.nativeElement,"mouseover");
+items$.subscribe(res=>{
+console.log(res?.target?.href);///we have to do data typing if target is undefined
+})
+}
+
+
+/////////////////////////////Interval/////////////////////////////////
+Creates an Observable that emits sequential numbers every specified interval of time, on a specified SchedulerLike
+
+Ex: let numbers=interval(1000);
+
+In Ts file:
+
+ordersArr = ["k","m","n"];
+orders$: Observable<string> = from(this.ordersArr);
+
+ngOnInit(){
+this.orders$.subscribe((data)=>{
+const seqNum$=Interval(1000);
+seqNum$.subscribe((num)=>{
+if(num<5){
+console.log(data + num);
+}
+});
+});
+}
+
+///////////////////////////////debounceTime//////////////////////////////
+
+
+If we want to emit our data after certain time, then we use this operator.
+we can use setTimeout also but setTimeout is basically works with a function where as debounceTime will emit a Observable.
+
+Usecases:
+1. Search 
+        -> user types the values---->You cannot call APIs so many times
+		->we need to give time lag
+		-> API call on every keyword type
+		
+2. So we will Delay/ Emit the next after some time gap
+
+
+Html:
+<div [formGroup]="searchForm">
+<input type="text" formControlName="name" (keyup)="readValue()">
+</div>
+
+In Ts:
+import {debounceTime} from "rxjs/operators";
+
+ searchForm: FormGroup;
+ 
+constructor(private formBuilder: FormBuilder){} 
+
+ngOnInit(): void {
+this.searchForm = new FormGroup({
+name:new FormControl('start search')
+})
+//valueChanges will emit an Observable.
+//Pipe will take in operators of rxjs and returns back the Observable with modified output
+this.searchForm.get('name').valueChanges.pipe(
+debounceTime(3000)
+).subscribe(res=>console.log(res));
+}
+
+readValue(){}
+
+
+///////////////////////////////take Operator///////////////////////////////////
+---Emits only the first count values emitted by the source Observable
+Usecases:
+Take only first two values and anything after that we ignore
+while searching, take only till 10 characters, after that don't take.
+
+//In above example, we will add take(2)
+this.searchForm.get('name').valueChanges.pipe(
+take(2),//take N values
+debounceTime(3000) // time lag before it emits next value
+).subscribe(res=>console.log(res));
+
+
+///////////////////////////////takeWhile Operator///////////////////////////////////
+----> It will take value and check with the condition, it will stop when condition is met.
+It will return a boolean value whether to continue or stop
+
+this.searchForm.get('name').valueChanges.pipe(
+takeWhile(v=> checkCondition(v)),// take values till the condition is true
+debounceTime(3000)
+).subscribe(res=>console.log(res);
+
+checkCondition(value){
+return value.length>5?false:true;
+}
+
+
+//////////////////////////takeLast Operator/////////////////////////////////////////
+-Waits for the source(Observable) to complete, then emits the last N values from the source, as specified by the count argument.
+
+In Ts:
+categories = ["M","N","O","P"];
+category$ : Observable<string[]> = from(this.categories);
+
+this.searchForm.get('name').valueChanges.pipe(
+takeWhile(v=> checkCondition(v)),// take values till the condition is true
+debounceTime(3000)
+).subscribe(res=>{
+console.log(res);
+
+this.category$.pipe(
+first(),//gives first value from fixed set of array/Enum values
+last(), //gives last value from fixed set of array/Enum values
+elementAt(2),// It will give single value from the source Observable based on index given. Its Array index, that means it always start with 0
+takeLast(2) ///where ever you are sure about the fixed data set/result , and you need specific last N elements
+).subscribe(data2=>{
+console.log(data2);//["O","P"]
+});
+});
+
+////////////////////////////filter Operator//////////////////
+1. HTTP call  -> If user is not from a city
+2.If tax is less than 30%
+
+Above are examples for fltering
+
+
+this.searchForm.get('name').valueChanges.pipe(
+filter(v=> checkCondition(v)),// filter values based on the condition is true
+debounceTime(3000)
+).subscribe(res=>{
+console.log(res);)
+
+///////////////////////distinct///////////////////////////
+It is same like set, which gives us unique values
+---It will give all the values from the source Observable that are distinct when compared with the previous value
+
+this.category$.pipe(
+distinct()
+).subscribe(data2=>{
+console.log(data2);//Gives only unique/non repeated values
+});
+});
+
+
+/////////////////Skip Operator///////////////////////////////////
+Skip Operator will give back an Observable that will skip the first occurence of count items taken as input.
+
+this.category$.pipe(
+count(), /// we get the count of Observable
+distinct(),
+skip(2), //skip the first 2 occurences
+max(),
+min()
+).subscribe(data2=>{
+console.log(data2);//Gives only unique/non repeated values
+});
+});
+
+
+
+RXJS(Reactive Extensions for Javascript) is a library for reactive programming using Observables that makes it easier to compose asynchronous or callback based code
+RXJS can be used with any framework or vanilla Javascript
+Comes with complete pack of Operators that we can work with
+For most operators, Input and Output will be Observables
+
+What is redux:
+Redux is the open source JS library for managing and centralizing application state. It is most commonly used with libraries such as React or Angular for building user Interfaces.
+State Management: It means you don't have to make an API call everytime. You make the API call once and get the data and when user navigates from one page to other, the data is served from the store(central place) and is given to different routes or screens
+
+what is NGRX:
+similar to Redux implementation for Angular
+

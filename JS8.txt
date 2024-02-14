@@ -1,0 +1,109 @@
+Callback Functions: 
+
+Functions are first class citizens in Javascript. That is we can take a function and pass it into another function. This function which you pass into another function is a callback function.
+
+Callback functions gives us access to the whole asynchronous world in a synchronous single threaded language(JS). 
+JS is a Synchronous. It can only do onething at a time and in a specific order.
+
+Due to callback, we can do async things in Javascript.
+
+Using Web APIs, setTimeout and the call back functions, we can achieve this asynchronous operations.
+
+
+
+
+Promise is the object that is used to handle asynchronous operations in the Javascript.
+
+It has 4 states:
+1. Fullfilled - It is the action related to the Promise succeeded - (resolve)=> result in .then()
+2. Rejected - It is the action related to the Promise when Rejected - (reject)=>result in .catch()
+3. Pending -  Promise is in pending status i.e it is neither completed nor rejected.
+4. Settled - Promise has completed or rejected => result in .finally()
+
+
+Promise Chaining:
+It will handle multiple asynchronous requests in a specific order where one asynchronous task is performed on completion of other asynchronous task.
+
+We can Perform Promise chaining 
+1. By returning a new instance of Promise in .then()
+2. By returning a value in .then()---Behind the scenes , it returns a Promise which is immediately resolved to the value
+
+Advantages:
+1. Better handling of Aysnchronous operations
+2. Improve Code Readability
+3. Better Error Handling
+
+
+// Promise Example:
+
+function promiseExample() {
+const executor = (resolve, reject) = > {
+console.log("Generating random number");
+const randomNum = Math.floor(Math.random() * 10);
+//We will use setTimeout for delaying thisoperation by 1 sec. Because of setTimeout also, we can achieve Asynchronous in synchronous execution
+setTimeout(()=>{
+if(randomNum >=5){
+resolve(`Promise resolved and number generated successfully ${randomNum}`);
+} else {
+reject(`Number is less than 5, so Error occured`);
+}
+},1000);
+}
+
+const generateNum =  new Promise(executor);
+
+generateNum
+.then((result)=>console.log(result))
+.catch(error=>console.log(error))
+.finally(()=>console.log("Promise is either completed or rejected))
+
+}
+
+promiseExample();
+
+
+// Promise Chaining - returning a instance of Promise in .then()
+
+function promiseReturningExample() {
+//We will be builting a ecommerce website where we will be adding items and based on items , we will be entering shippingAddress and based on that we will be making payment
+
+const buyingItems = (resolve,reject) => {
+const items = [{id:1,name:"Car",cost:10L},{id:2,name:"Bike",cost:2L}];
+// we will be using setTimeout for 2s delaying
+setTimeout(()=>{
+if(items){
+resolve(`Items added successfully ${items.length}`);
+} else {
+reject("Items not added");
+}
+},2000)
+}
+
+const shippingAddress = () => {
+const address = "xyz,india";
+return new Promise((resolve,reject)=> {
+if(address) {
+resolve(`Shipping Address added -  ${address}`);
+} else {
+reject("Shipping Address not added");
+}
+})
+}
+
+buyingItems
+.then(result=>{
+console.log(result);
+shippingAddress();
+})
+.then(address=>{
+console.log(address);
+})
+.catch(error=>console.log(error))
+.finally(()=>console.log("Promise is either completed or rejected"));
+
+}
+
+promiseReturningExample();
+
+
+

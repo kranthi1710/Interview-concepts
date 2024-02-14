@@ -1,0 +1,53 @@
+//Debouncing Revision
+//Debouncing
+
+Self closing tags are also alternatively known as void tags, empty tags, singletons tags, etc. i.e these tags do not have contents and also can not have any child.
+A few examples of self closing tags are <img />, <input />, <br />, <hr />, etc.
+
+Debouncing and Throttling are used for optimizing performance of a webapp. It happens by limiting the rate of function calls.
+
+Sometimes, we attach a function to a event listener like button, and on click of button many times, this function attached is also called many times which can affect the performance. To limit that function calls , we use these Debouncing and Throttling concepts.
+
+Debouncing---If the difference between two key stroke events is certain delay, then only make a function call.
+Throttling---If the difference between last function call and this other function call is certain delay, then only make a function call. It will ignore all the events occured between that time delay.
+
+scenario2: We want to track the user when the user is resizing our browser. How many times a particular user resize the browser.
+
+linear-gradient(to right, #254f7e, #2262ac)
+#244364
+
+
+linear-gradient(to right,#287f82,#75ca64);
+
+
+Sakshi Talekar 
+    Aiswarya Ponna 
+    Ajith Kumar J 
+    Naresh Paati 
+    Poonam Dherange 
+        SIDHU TIWARI 
+    Venkata Sai Manikanta Praveen Devarasetty 
+    Ayushi Gupta 
+	karthik p
+    Banurekha M 
+    Dinakar Reddy Gopavaram 
+    Komal Agrawal 
+    Kotturi Saikumar 
+    KRANTHI KUMAR REDDY YANDAPALLY 
+    Tejeswar Reddy Tadi 
+    Lalitha Irrinki 
+    Sachin Birajdar 
+    Venkata Sairam Singothu 
+    Akash B M 
+    Manisha Kummari 
+    Meghana G R 
+    Meghana L 
+    Saket Sachin Gandhi 
+	
+	
+	Ajith chande
+	Harish
+	
+	fernando.albiero
+	anderson.kubota
+	raunaq.singh---Not there 

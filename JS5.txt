@@ -1,0 +1,193 @@
+// Promise.allSettled() 
+
+//- It returns a promise that gets resolved when all the passed promises are settled(either fulfilled or rejected). And in result, It returns an array of Objects having status and value/reason of each promise.
+//If passed empty array, it gives empty array.
+
+const p1 = new Promise((resolve,reject) => {
+    setTimeout(()=>{
+        resolve(`1st Promise resolved`);
+    },1000)
+}
+);
+
+const p2 = Promise.resolve("2nd Promise resolved");
+const p3 = 3;
+const p4 = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        let status = true;
+        if(status){
+            resolve("4th Promise resolved");
+        } else {
+            reject("4th Promise rejected");
+        }
+    },2000)
+})
+
+Promise.allSettled([p1,p2,p3,p4]).then(res=>console.log(res)).catch(err=>console.log(err));
+
+//Using aysnc and await inside IIFE(Immediately Invoked Function Expressions)
+(async ()=> {
+    const result =  await Promise.allSettled([p1,p2,p3,p4]);
+    console.log("res",result);
+})();
+
+
+//Polyfill for Promise.allSettled
+Promise.customAllSettled = (promises) => {
+    return new Promise((resolve,reject)=> {
+        const results = [];
+        if(promises.length===0){
+            resolve(results);
+            return;
+        }
+        
+        let pendingPromises = promises.length;
+        function resolvePromises(){
+            pendingPromises--;
+            if(pendingPromises===0){
+                resolve(results);
+                return;
+            }
+        }
+        
+        promises.forEach((promise,idx)=>{
+            Promise.resolve(promise).then(res=>{
+                results[idx]={status:"fulfilled",value:res};
+                resolvePromises();
+            }).catch(err=>{
+                results[idx]={status:"rejected",value:err};
+                resolvePromises();
+            })
+        })
+    })
+}
+
+
+Promise.customAllSettled([p1,p2,p3,p4]).then(res=>console.log(res)).catch(err=>console.log(err));
+
+// (async () => {
+//     const results = await Promise.customAllSettled([p1,p2,p3,p4]);
+//     console.log("res",results);
+// })();
+
+
+// Promise.allSettled polyfill using map and Promise.all
+Promise.customAllSettled2 = (promises) => {
+        const transformedPromises = promises.map(promise=>{
+           return Promise.resolve(promise).then(res=>{
+                return { status:"fulfilled", value:res};
+            }).catch(err=>{
+                return {status:"rejected",value:err};
+            })
+        });
+        return Promise.all(transformedPromises);
+}
+
+Promise.customAllSettled2([p1,p2,p3,p4]).then(res=>console.log(res)).catch(err=>console.log(err));
+
+
+//Promise.any() - It executes all passed promises and it returns the first resolved promise.
+//Promise.any() cases:
+// If all passed promises fails, it returns a AggregatorError "All promises are rejected"
+//If it encounters empty array, It throws error.
+
+const p1=new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        reject("first promise got rejected");
+    },1000)
+})
+
+const p2=Promise.reject("second promise got rejected");
+
+const p3=new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        let status=true;
+        if(status){
+            resolve("3rd promise is resolved");
+        } else {
+            reject("3rd Promise is rejected");
+        }
+    })
+});
+
+Promise.any([p1,p2,p3]).then(res=>console.log(res)).catch(err=>console.log(err));
+
+
+//Polyfill for Promise.any()
+Promise.customAny = (promises) => {
+    return new Promise((resolve,reject)=>{
+        const errors = [];
+        let failedCount = 0;
+        if(promises.length===0){
+            reject(new Error());
+        }
+        
+        promises.forEach((promise,i)=>{
+            Promise.resolve(promise).then(res=>{
+                resolve(res);
+            }).catch(err=>{
+                failedCount++;
+                errors[i]=err;
+                if(failedCount===promises.length){
+                    reject(new AggregateError(errors,"All promises are rejected"));
+                }
+            })
+        })
+    })
+}
+
+Promise.customAny([p1,p2,p3]).then(res=>console.log(res)).catch(err=>console.log(err));
+
+
+//Promise.race() --- It executes all passed promises concurrently and returns the first resolved or rejected promise result.
+
+// Note:
+// If passed empty [], it will be forever pending
+
+const p1=new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        resolve("first promise is resolved");
+    })
+})
+
+const p2=Promise.reject("second promise is rejected");
+const p3=3;
+const p4=new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        let status=true;
+        if(status){
+            resolve("4th Promise is resolved");
+        } else {
+            reject("4th Promise is rejected");
+        }
+    })
+})
+
+Promise.race([p1,p2,p3,p4]).then(res=>console.log(res)).catch(err=>console.log(err));
+
+//Promise.race() polyfill
+
+Promise.customRace = (promises) => {
+    return new Promise((resolve,reject)=>{
+        promises.forEach((promise,i)=>{
+            Promise.resolve(promise).then((res)=>{
+                resolve(res);
+            })
+        })
+    })
+}
+
+//  Promise.customRace([p4]).then(res=>console.log(res)).catch(err=>console.log(err));
+
+Prototype Inheritance:
+One Object is trying to access methods and properties of another object
+
+Prototype:
+When ever you create any object, JS engine will automatically puts hidden properties into an Object(__proto__) and attaches it to your object/method/array/function etc.
+
+Object.__proto__ is equal to Object.prototype
+
+Everything in JS is an Object. 
+
+
+ 

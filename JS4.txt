@@ -1,0 +1,182 @@
+Revision:
+
+//Promise.all() polyfill --- Promise.all takes array of promises and then execute them parallely and returns the array of fulfilled promises or rejected promise.
+//Note: If input promises array is passed empty, then it returns empty array.
+
+const p1 = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        resolve("1st Promise is resolved");
+    })
+});
+
+const p2 = Promise.resolve("2nd Promise resolved");
+const p3=3;
+const p4=new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        const status = false;
+        if(status){
+            resolve("4th Promise is resolved");
+        } else {
+            reject("4th Promise is rejected");
+        }
+    })
+});
+
+ Promise.all([p1,p2,p3,p4]).then(res=>console.log(res)).catch(err=>console.log(err));
+
+Promise.allPolyfill = (promises) =>{
+    return new Promise((resolve,reject)=>{
+        //Array of fulfilled promises or rejected promise
+        const results = [];
+        //check if empty array
+        if(promises.length===0){
+            resolve(results);
+        }
+        //keep a track of pending Promises when looping them
+        let pendingPromises = promises.length;
+        //Loop through each promise and resolve them or reject them
+        promises.forEach((promise,idx)=>{
+            //first we need to resolve the promise and then we need to resolve the result as well to store in results array
+            Promise.resolve(promise).then(res=>{
+                results[idx]=res;
+                pendingPromises--;
+                
+                if(pendingPromises===0){
+                    resolve(results);
+                }
+            },reject)
+        })
+        
+    })
+}
+
+Promise.allPolyfill([p1,p2,p3,p4]).then(res=>console.log(res)).catch(err=>console.log(err));
+
+
+//Promise.allSettled Polyfill using map and Promise.all()
+Promise.allSettledPolyfill2 = (promises) =>{
+    // why to return a new Promise, Anyways we are returning Promise.all(transformedPromises)
+        const transformedPromises = promises.map((promise)=>{
+            return Promise.resolve(promise).then(res=>{
+                 return {status:"fulfilled", value:res};
+            }).catch(err=>{
+                return {status:"rejected",reason:err};
+            })
+        });
+       return Promise.all(transformedPromises);
+}
+
+Promise.allSettledPolyfill2([p1,p2,p3,p4]).then(res=>console.log(res)).catch(err=>console.log(err));
+
+//Using async and await
+(async () =>{
+    const msg = await Promise.allSettled([p1,p2,p3,p4]);
+    console.log("msg",msg);
+})();
+
+//Promise.any() - It executes all passed Promises and returns the first resolved  promise.
+// If given empty array, It will throw error
+//If all passed promises are failed, then it returns AggregateError "All Promises were rejected".
+
+const p1 = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        reject("1st Promise is resolved");
+    })
+});
+
+const p2 = Promise.reject("2nd Promise resolved");
+const p3=Promise.reject("2nd Promise resolved");
+const p4=new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        const status = false;
+        if(status){
+            resolve("4th Promise is resolved");
+        } else {
+            reject("4th Promise is rejected");
+        }
+    })
+});
+
+Promise.any([p1,p2,p3,p4]).then(res=>{
+    console.log(res);
+}).catch(err=>console.log(err));
+
+//Promise.any() Polyfill
+Promise.anyPolyfill = (promises) => {
+    return new Promise((resolve,reject)=>{
+        //To capture all the error messages for the Aggregate error
+        const errors = [];
+        //If empty error, throw the error
+        if(promises.length===0){
+            reject(new Error());
+        }
+        
+        //To keep track of for loop promises
+        let failedCount = 0;
+        
+        promises.forEach((promise,idx)=>{
+            Promise.resolve(promise).then((res)=>{
+                resolve(res);
+            }).catch(err=>{
+                 errors[idx]=err;
+                 failedCount++;
+                if(promises.length===failedCount){
+                    reject(new AggregateError(errors,"All Promises were rejected"));
+                }
+            })
+        })
+        
+        
+        
+    })
+}
+
+Promise.anyPolyfill([p1,p2,p3,p4]).then(res=>{
+    console.log(res);
+}).catch(err=>console.log(err));
+
+
+//Promise.any() - It executes all passed Promises and returns the first resolved  or rejected promise.
+// If given empty array, It will throw error
+//If all passed promises are failed, then it returns AggregateError "All Promises were rejected".
+
+const p1 = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        resolve("1st Promise is resolved");
+    })
+});
+
+const p2 = Promise.reject("2nd Promise rejected");
+const p3=Promise.resolve("3rd Promise resolved");
+const p4=new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        const status = false;
+        if(status){
+            resolve("4th Promise is resolved");
+        } else {
+            reject("4th Promise is rejected");
+        }
+    })
+});
+
+Promise.race([p1,p3,p4]).then(res=>{
+    console.log(res);
+}).catch(err=>console.log(err));
+
+Promise.customRace = (promises) => {
+    return new Promise((resolve,reject)=>{
+        if(promises.length===0){
+            reject(new Error());
+        }
+        promises.forEach((promise,i)=>{
+            Promise.resolve(promise).then(res=>{
+                resolve(res);
+            }).catch(err=>{
+                reject(err);
+            })
+        })
+    })
+}
+Promise.customRace([p1,p3,p4]).then(res=>{
+    console.log(res);
+}).catch(err=>console.log(err));

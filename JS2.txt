@@ -1,0 +1,83 @@
+Revision:
+
+// Call()---Using call method, we can do function borrowing from one method to other method.
+//In this call method, we pass the first argument as reference to this which this call is pointed to (ex:Object/method)
+//Call method used to invoke a function directly by passing in reference to "this"  variable (i.eObject/function) inside that method
+
+const name = {
+    firstname:"kranthi",
+    lastname:"Reddy"
+}
+
+function getFullName(hometown,mandal,district){
+    console.log(`${this.firstname} ${this.lastname} from ${hometown} in ${mandal} of ${district}`);
+}
+
+const name2 = {
+     firstname:"kishor",
+    lastname:"Reddy"
+}
+
+//we are calling apply function on a method and passing first argument as reference to the object and remaining arguments as an Array.
+// getFullName.call(name,"vallur","itikyala","Jogulamba Gadwal");
+// getFullName.call(name2,"vallur","itikyala","Jogulamba Gadwal");
+
+//Polyfill for call method.
+Function.prototype.myApply = function(context,args=[]){
+    if(!Array.isArray(args)){
+        throw new Error("Remainder, Apply method takes only array of arguments");
+    }
+    //Here context refers to the object(i.e name here)
+    const currContext = context || globalThis;
+    //Symbol ensures that new method created will not override the existing methods
+    //Here this new prop gets the function as below pointing to this(i.e,getFullName method).
+    let newProp = Symbol();
+    //Here we are passing function into Object and then invoking it
+    currContext[newProp]=this;
+    let result=currContext[newProp](...args);
+    delete currContext[newProp];
+    return result;
+    
+}
+
+getFullName.myApply(name,["vallur","itikyala","Jogulamba Gadwal"]);
+
+
+
+//Bind method  --- This method does not directly invoke a method which it is binded to but it gives a copy of the exact same method, which we can make use of it later
+
+const name = {
+    firstname:"kranthi",
+    lastname:"Reddy"
+}
+
+function getFullName(hm,mm,ll){
+    console.log(`${this.firstname} ${this.lastname} from ${hm} and ${mm} and ${ll}`);
+}
+
+// let printMyname = getFullName.bind(name,"kk","bjd");
+// printMyname("jdsjf");
+
+//Polyfill for Bind
+Function.prototype.myBind = function(context,...args){
+    //Context is the object which we are referencing to (here it is name object)
+    let currContext = context || globalThis;
+    let newProp = Symbol();
+    //In this name Object(currContext), we are calling function-->this-->getFullName and then we invoke in return function
+//     const name = { ///Context
+//     firstname:"kranthi",
+//     lastname:"Reddy",
+//  getFullName : function(hm,mm,ll){///name[getFullName]===currContext[newProp]===this
+//     console.log(`${this.firstname} ${this.lastname} from ${hm} and ${mm} and ${ll}`);
+// }
+// }
+    currContext[newProp]=this;//this refers to getFullName method
+    return function(...outer){
+       let result = currContext[newProp](...args,...outer);
+       delete currContext[newProp];
+       return result;
+    }
+}
+
+let printMyname = getFullName.myBind(name,"kk","bjd");
+printMyname("jdsjf","hjdbfks");

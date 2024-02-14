@@ -1,0 +1,300 @@
+what is promise:
+
+A Promise is a Object that handles aysnchronous operations in Javascript.
+
+Promise has four states:
+1. Fulfilled : Action related to Promise when succeeded. (resolve)=>result in .then()
+2. Rejected: Action Perfomed by Promise when Rejected .  (reject)=> result in .catch() block
+3. pending: Promise is neither fulfilled nor rejected. It is in pending status
+4. settled: Promise has fulfilled or rejected .()=>result in .finally() block
+
+Promise Chaining: It allows you to chain multiple asynchronous calls in a specific order where one asynchronous task will be performed after the completion of another asynchronous task.
+
+We will perform Promise chaining :
+By returning a Promise in .then()
+By returning a value in .then() block, where behind the scenes Promise is returned that will immediately resolves to value 
+
+
+// By returning a Promise 
+function promiseExample() {
+const executor = (resolve,reject) => {
+console.log("generating the random number"):
+const num= Math.floor(Math.random()*10);
+console.log(num);
+setTimeout(()=>{
+if(num>=5){
+resolve(`number generated sucessfully`);
+} else {
+reject(`Num not generated: Error`);
+}
+},1000);
+}
+
+const genNum = new Promise(executor);
+genNum.then((res)=>console.log(res)).catch(err=>console.log(err)
+
+}
+promiseExample();
+
+
+// Promise Cahining ---Returning a Promise
+
+function promiseChainingReturnPromise() {
+    const addItems = new Promise((resolve,reject) => {
+        const items = [{id:1,name:"car"},{id:2,name:"bike"}];
+        setTimeout(()=>{
+            if(items){
+                resolve(`${items.length} items added succesfully`)
+            } else {
+                reject(`Error: ${error}`)
+            }
+        },1000);
+    });
+    
+    const shippingAddress = () => {
+        const address = "xyz,London";
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+            if(address){
+                resolve(`Address Added successfully`);
+            } else {
+                reject(`Error Occured : ${error}`);
+            }
+        },1000);
+        })
+    }
+    
+    const payment = () => {
+        const pmt = 1000;
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                if(pmt){
+                    resolve(`payment done of Rs:${pmt}`);
+                } else {
+                    reject(`payment not done`);
+                }
+            },1000)
+        });
+    }
+    
+    addItems.then((res)=>{
+        console.log(res);
+        return shippingAddress();
+    }).then(res=>{
+        console.log(res);
+        return payment();
+    }).then(res=>console.log(res)).catch(err=>console.log(err));
+}
+
+promiseChainingReturnPromise();
+
+
+
+// Promise Cahining ---Returning a value
+
+function promiseChainingReturnValue() {
+    const addItems = new Promise((resolve,reject) => {
+        let num = 1000;
+        setTimeout(()=>{
+           if(num){
+                resolve(num);
+            } else {
+                reject(`Error`)
+            }
+        },1000);
+    });
+    
+    
+    addItems.then((res)=>{
+        console.log(res);
+        return res*2;
+    }).then(res=>{
+        console.log(res);
+        return res*2;
+    }).then(res=>console.log(res)).catch(err=>console.log(err));
+}
+
+promiseChainingReturnValue();
+
+
+//Promise Example
+const executor = (resolve,reject)=>{
+    setTimeout(()=>{
+        reject(2);
+   },1000)
+}
+
+// const prom = new Promise(executor);
+// prom.then(res=>console.log(res)).catch(err=>console.log("err",err));
+
+
+//Promise Polyfill code
+function customPromise(executor) {
+    //Write here
+    
+    let onResolve,onReject, isFulfilled = false,isRejected=false, isCalled = false , value;
+    
+    //For synchronous operations, resolve will not enter then block, so we check for isFulfilled and isCalled in resolve method and then we call onresolve with updated value from resolve method in then() block.
+    function resolve(val){
+        isFulfilled = true;
+        value = val;
+        if(typeof onResolve === "function"){
+        onResolve(val);
+        isCalled = true;
+        }
+    }
+    
+    function reject(val){
+        isRejected = true;
+        value = val;
+        if(typeof onReject === "function"){
+        onReject(val);
+        isCalled = true;
+        }
+    }
+    
+    this.then = (callback) => {
+        onResolve = callback;
+        if(isFulfilled && !isCalled){
+            onResolve(value);
+            isCalled = true;
+        }
+        return this;
+    }
+    
+    this.catch = (callback) => {
+        onReject = callback;
+        if(isRejected && !isCalled){
+            onReject(value);
+            isCalled = true;
+        }
+        return this;
+    }
+    
+   // We need to call this executor function, so that it will invoke resolve and reject callback functions. We are duplicating resolve and reject with onResolve and onReject and we return them in then and catch blocks
+    try{
+    executor(resolve,reject);
+    } catch(error){
+        console.log(error);
+    }
+}
+
+const cusProm = new customPromise(executor);
+cusProm.then(res=>console.log(res)).catch(err=>console.log("err",err));
+
+
+//Promise.all()
+//This is a Promise combinator. It takes array of Promises and execte them in parallel. It will return the Array of fulfilled promise results but if there is any failure, it returns the failure Promise result.
+
+function subscribeChannel(uname){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve(`Subscribe to ${uname} channel`);
+        },1000);
+    });
+}
+
+function likeTheVideo(video){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve(`Like the ${video}`);
+        },1000)
+    })
+}
+
+function shareTheVideo(video){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve(`Share the ${video}`);
+        },1000)
+    })
+}
+
+// Promise.all([subscribeChannel("KKR"),likeTheVideo("Promises"),shareTheVideo("Promises")]).then(res=>console.log(res)).catch(err=>console.log("Error occured in",err));
+
+
+
+
+Promise.allPolyfill = (promises) => {
+    return new Promise((resolve,reject)=>{
+    const results = [];
+    //If promises array is empty
+    if(!promises.length){
+        resolve(results);
+        return;
+    }
+    let pendingPromises = promises.length;
+    //looping over each Promise and resolving it by Promise.resolve(promise) and storing result in results at specific index.
+    promises.forEach((promise,idx)=>{
+        Promise.resolve(promise).then((res)=>{
+            results[idx]=res;
+            pendingPromises--;
+            if(pendingPromises === 0){
+                resolve(results);
+            }
+        },reject)
+    })
+    })
+}
+
+Promise.allPolyfill([subscribeChannel("KKR"),likeTheVideo("Promises"),shareTheVideo("Promises")]).then(res=>console.log(res)).catch(err=>console.log("Error occured in",err));
+
+
+
+//Promise.all() --- If we have provided multiple promises to Promise.all . It will execute all the given promises in parallel and return the array of all fulfilled Promises . If there is any rejected promise, it will provide that failed message/error.
+
+function subscribeChannel(uname){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve(`subscribe to ${uname} channel`);
+        })
+    })
+}
+
+function likeVideo(video){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            reject(`like the ${video}`);
+        })
+    })
+}
+
+function shareVideo(video){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve(`share the ${video}`);
+        })
+    })
+}
+
+
+Promise.all([subscribeChannel("kkr"),likeVideo("JS"),shareVideo("JS")]).then(res=>console.log(res)).catch(err=>console.log(err));
+
+Promise.allPolyfill = (promises) => {
+    //It will return a array of fulfilled promises or rejected promise
+    return new Promise((resolve,reject)=>{
+        //We need to create a array to store results of fulfilled promises or rejected promise
+        const results = [];
+        
+        //check for empty input array
+        if(promises.length===0){
+            resolve(results);
+            return;
+        }
+        
+        let pendingPromises = promises.length;
+        promises.forEach((promise,idx)=>{
+            Promise.resolve(promise).then(res=>{
+                //After resolving we need to store result of each promise in results array.
+                results[idx]=res;
+                pendingPromises--;
+                if(pendingPromises===0){
+                    resolve(results);
+                    return;
+                }
+            }).catch(err=>reject(err));
+        })
+    })
+}
+
+Promise.allPolyfill([subscribeChannel("kkr"),likeVideo("JS"),shareVideo("JS")]).then(res=>console.log(res)).catch(err=>console.log(err));

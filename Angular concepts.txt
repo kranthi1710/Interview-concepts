@@ -1,0 +1,61 @@
+DSTPATH="C:/Kranthi_data/EVE/backend/Azure/eve-web/src/main/resources/static"
+
+Parent.ts
+element = [{ name: 'kkr', age: 25 }];
+parent.html
+<hello [elem]="element"></hello>
+
+child .ts
+@Input('elem') elemArr: [{ name: string; age: number }];
+  ngOnInit() {
+    console.log(this.elemArr[0]);
+  }
+  
+  
+  vice versa
+  
+  hello comp. ts
+  
+  import { OnInit } from '@angular/core';
+import { EventEmitter } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
+
+@Component({
+  selector: 'hello',
+  template: `<button (click)="btnClick()">Click Me</button>
+  <ng-content></ng-content>`,
+  styles: [`h1 { font-family: Lato; }`],
+})
+export class HelloComponent implements OnInit {
+  @Output('kkr') serverCreated = new EventEmitter<{
+    name: string;
+    age: number;
+  }>();
+  ngOnInit() {}
+  btnClick() {
+    this.serverCreated.emit({ name: 'kkr', age: 25 });
+  }
+}
+
+in app.ts
+
+  serverCreated(event) {
+    console.log(event);
+  }
+  
+  in app.html
+  
+  <hello (kkr)="serverCreated($event)">
+  <p>My name is kkr</p>
+  <h1>I am a Front end developer</h1>
+</hello>
+
+
+
+--------------------------------Authentication---------------
+
+Auth.comp.html
+<div>
+
+</div>
