@@ -13,3 +13,16 @@ function runningSum(a){
     }
     return totArr;
 }
+
+---------------------------------------------------------------------
+Optimized Solution: Removed second loop and move currSum variable above
+
+function runningSum(a){
+    let totArr=[];
+     let currSum=0;
+    for(let i=0;i<a.length;i++){
+        currSum+=a[i];
+        totArr.push(currSum);
+    }
+    return totArr;
+}
