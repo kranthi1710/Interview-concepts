@@ -1,0 +1,35 @@
+//Day 2:(2) Number of good pairs
+
+const nums=[1,2,3,1,1,3];
+//Output:  (0,3),(0,4),(3,4),(2,5)
+// Explaination: If num[i]==num[j] return (i,j)
+console.log(goodPairs(nums));
+function goodPairs(nums){
+    let arr=[];
+    let pair=0;
+    for(let i=0;i<nums.length;i++){
+        for(let j=i+1;j<nums.length;j++){
+            if(nums[i]==nums[j]){
+                arr.push(i+","+j);
+                pair++;
+            }
+        }
+    }
+    return pair+" and  "+arr;
+}
+
+-----------------------------------------------------------------------------
+
+function goodPairs(nums){
+    let result={};
+    let pair=0;
+    for(let i of nums){
+        if(i in result){
+            pair+=result[i];
+            result[i]++;
+        }else{
+            result[i]=1;
+        }
+        }
+    return result;
+}
