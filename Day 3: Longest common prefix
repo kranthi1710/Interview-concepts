@@ -17,3 +17,19 @@ function longestCommonPrefix(){
       r+=strs[0][i];
    } 
 }
+
+
+
+---------------------------------Alternative Approach-----------------------
+
+function longestCommonPrefix(){
+    let r='';
+    for(let i=0;i<strs.length;i++){
+  if(strs.every(str=>str[i]==strs[0][i])){
+      r+=strs[0][i];
+  }else{
+      break;
+  }
+    }
+    return r;
+}
