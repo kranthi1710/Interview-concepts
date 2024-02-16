@@ -1,0 +1,19 @@
+// Day 3: Longest common prefix
+
+// Input: strs=["flower","flow","flight"];
+// output:"fl"
+
+const strs=["flower","flow","flight"];
+console.log(longestCommonPrefix(strs));
+function longestCommonPrefix(){
+    let r='';
+   for(let i=0;i<strs.length;i++){
+      for(let j=0;j<strs.length;j++){
+          //console.log(i,j,strs[0][i],strs[j][i]);
+          if(strs[0][i]!==strs[j][i]){
+              return r;
+          }
+      }
+      r+=strs[0][i];
+   } 
+}
