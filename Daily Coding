@@ -1,0 +1,16 @@
+Daily Coding:
+
+Day 4:
+
+//Generate Finonacci sequence
+
+function generateFibonacci(arr,n){
+    let fibonacciSeries=arr;
+   for(let i=2;i<n;i++){
+       let nextFibonacci=fibonacciSeries[i-2]+fibonacciSeries[i-1];
+       fibonacciSeries.push(nextFibonacci);
+   }
+   return fibonacciSeries;
+}
+
+console.log(generateFibonacci([10,20],8));
