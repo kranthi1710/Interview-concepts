@@ -14,3 +14,23 @@ function generateFibonacci(arr,n){
 }
 
 console.log(generateFibonacci([10,20],8));
+
+--------------------------------------------------------------------------------------
+
+//Two sum
+
+function twoSum(a,t){
+    let finalArr=[];
+    for(let i=0;i<a.length;i++){
+        for(let j=i+1;j<a.length;j++){
+            if(a[i]+a[j]===t){
+                finalArr.push([i,j]);
+            }
+        }
+    }
+    return finalArr;
+}
+const arr=[3,2,4];//[2,7,11,15]---target-9
+const target=6;
+//Output: [0,1]----> Indexes Array
+console.log(twoSum(arr,target));
