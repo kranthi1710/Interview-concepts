@@ -55,3 +55,35 @@ twoSum([7,11,15,2], 15);
 
 
 ----------------------------------------------------------------------------
+// Balanced paranthesis
+console.log(matchingParenthesis("{(Ebere) [Njoku](Samson)}"));
+
+function matchingParenthesis(str){
+   // Remove the characters in a string and keep only special characters
+   let paranthesis="[{()}]";
+  let openParams=["[","{","("];
+  let closeParams=["]","}",")"];
+  let stack=[];
+  //Keep only paranthesis
+ let filteredStr=str.split("").filter(e=>[...paranthesis].includes(e));
+  
+  
+  //Push the open Paranthesis inside a stack
+  // If we encounter any close Paranthesis , then get the last index element of the stack
+  //Check for index of last stack element in open Params array and compare it with element in closeParams
+ for(let i of filteredStr){
+     if(openParams.includes(i)){
+         stack.push(i);
+     }else{
+         let lastElem=stack[stack.length-1];
+         if(closeParams.indexOf(i)===openParams.indexOf(lastElem)){
+             stack.pop(lastElem);
+         }else {
+              return "closing brace does not match opening brace";
+            }
+     }
+    
+ }
+ if (stack.length !== 0) return "braces do not match";
+        return "All openning brace has a closing brace to match";
+}
