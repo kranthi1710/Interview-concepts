@@ -116,3 +116,23 @@ function smallerNumThanCurrent(nums){
   }  
   return countArr;
 }
+
+
+
+-----------------------------------------------------------------------------------
+
+//Split Strings by Separator
+
+// Example 1:
+
+// Input: words = ["one.two.three","four.five","six"], separator = "."
+// Output: ["one","two","three","four","five","six"]
+
+const  words = ["one.two.three","four.five","six"], separator = ".";
+console.log(threeSumClosest(words, separator));
+function threeSumClosest(words, separator){
+   console.log(words.join(separator).split(separator).filter(Boolean));
+}
+
+//array.filter(Boolean)--- Filters the falsy values and returns the array but it does not mutate the original array.
+
