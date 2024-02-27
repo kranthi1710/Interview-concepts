@@ -185,5 +185,29 @@ function intersection(nums){
    console.log(ref);
 }
 
+--------------------------------------------------------------------------------
+// Grouping Anagrams
+console.log(groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]));
+/*
+  [ [ 'ate', 'eat', 'tea' ], [ 'nat', 'tan' ], [ 'bat' ] ]
+*/
 
+function groupAnagrams(arr){
+    //First we need to sort and get all elements 
+  let rearranged=arr.map(e=>{
+      return [...e].sort().join('');
+  });
+  
+  let uniqueArr=[...new Set(rearranged)];
+
+// We need to compare array elements with uniqueArr elements by sorting and joining them
+let finalArr=[];
+uniqueArr.forEach((word)=>{
+    let chunk=arr.filter((char)=>{
+        return word===[...char].sort().join('');
+    })
+    finalArr.push(chunk.sort());
+})
+return finalArr;
+}
 
