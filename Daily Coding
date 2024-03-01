@@ -211,3 +211,19 @@ uniqueArr.forEach((word)=>{
 return finalArr;
 }
 
+
+-----------------------------------------------------------------------------
+// reverse a number
+
+const num=-123;
+reverseNum(num);
+function reverseNum(n){
+    let arr=[];
+    let positiveNum=Math.abs(n);
+    while(positiveNum>0){
+        arr.push(positiveNum%10);
+        positiveNum=Math.floor(positiveNum/10);
+    }
+    console.log(arr.join('')*Math.sign(n));
+}
+
