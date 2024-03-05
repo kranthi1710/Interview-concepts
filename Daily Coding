@@ -254,3 +254,23 @@ function duplicateZeros(a){
      console.log(finalArr);
 }
 
+
+Alternative:
+
+// Input: arr = [1,0,2,3,0,4,5,0]
+// Output: [1,0,0,2,3,0,0,4]
+const arr = [1,0,2,3,0,4,5,0];
+duplicateZeros(arr);
+function duplicateZeros(a){
+    for(let i=0;i<a.length;i++){
+      if(a[i]==0){
+          //array.splice(index, howmany, item1, ....., itemX)
+          a.splice(i,0,0);
+          a.pop();
+          i++;//We will get the element added so we have to increment the index
+      }
+    }
+    
+    
+}
+
