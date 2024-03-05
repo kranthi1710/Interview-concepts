@@ -227,3 +227,30 @@ function reverseNum(n){
     console.log(arr.join('')*Math.sign(n));
 }
 
+-------------------------------------------------------------------------------------
+Dulicates Zeros
+
+Given a fixed-length integer array arr, duplicate each occurrence of zero, shifting the remaining elements to the right.
+
+Note that elements beyond the length of the original array are not written. Do the above modifications to the input array in place and do not return anything.
+
+// Input: arr = [1,0,2,3,0,4,5,0]
+// Output: [1,0,0,2,3,0,0,4]
+const arr = [1,0,2,3,0,4,5,0];
+duplicateZeros(arr);
+function duplicateZeros(a){
+    let finalArr=[];
+    for(let i=0;i<a.length;i++){
+        console.log(finalArr.length,a.length);
+        if(finalArr.length<a.length){
+        if(a[i]===0){
+            finalArr.push(a[i],0);
+           
+        } else{
+            finalArr.push(a[i]);
+        }
+        }
+    }
+     console.log(finalArr);
+}
+
