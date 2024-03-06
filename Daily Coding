@@ -334,3 +334,25 @@ this in childArrow will point to Window Object
 obj---->innerObj---->Normal
 this in normalfn will point to innerObj
 
+
+----------------------------------------------------------------------------------------------
+Redux Middlewares---- Functions that provide a third point extension point between dispatching an action and the moment it reaches the Reducer function.
+Uses:
+Handling Asynchronous actions, side effects or modify actions before they reach reducer
+Intercepting actions
+useful for logging, transformations, cancelling actions
+
+const mymiddleWare=(store)=>(next)=>(action)=>{
+next(action);
+}
+//Returns the fulfilled or error status.
+
+
+configuring middleware in the store:
+const store=createStore(rootReducer,applyMiddleware(mymiddleWare,thunkMiddleware));
+redux-thunk----Handle asynchronous actions using functions
+redux-saga----> Uses generator functions to manage side-effects
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Mock Api calls 
