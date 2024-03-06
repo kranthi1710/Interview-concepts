@@ -287,3 +287,50 @@ console.log(3);
 
 //O/p: 1 3 2
 
+---------------------------------------------------------------------------
+
+This context:
+
+obj-->method---->this context inside method will point to obj
+
+const obj={
+    name:"kkr",
+    displayName(){
+        console.log(this);
+        console.log(this.name);
+    }
+}
+
+obj.displayName();
+//O/p:
+//{ name: 'kkr', displayName: [Function: displayName] }
+//kkr
+
+-------
+function fn(){
+    console.log(this);//Window Object in non strict mode
+}
+fn();
+
+-------
+"use strict"
+
+function fn(){
+    console.log(this);//Undefined in strict mode
+}
+fn();
+
+-----------
+
+obj--->Normal--->Arrow
+this inside arrow fn will point to the normal fn(lexical parent)
+
+obj--->parentNormal---->childNormal
+this inside childNormal will point to window Object
+
+ParentArrow---->ChildArrow
+this in childArrow will point to Window Object
+
+obj---->innerObj---->Normal
+this in normalfn will point to innerObj
+
