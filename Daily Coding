@@ -355,4 +355,20 @@ redux-saga----> Uses generator functions to manage side-effects
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-Mock Api calls 
+//flatten Array
+
+const arr=[1,[2,3],[4,[5,6],7],8];
+console.log(flattenArr(arr));
+function flattenArr(a){
+    let finalArr=[];
+for(let i of a){
+    if(Array.isArray(i)){
+        let ar=flattenArr(i);
+        finalArr= [...finalArr,...ar];
+    }else{
+    finalArr.push(i);
+    }
+}
+return finalArr;
+}
+
