@@ -33,3 +33,42 @@ const indiaBatting=(syncCall,callDhoni)=>{
     console.log("hofFunction completed.");
 }
 indiaBatting(syncCallbackFunc,dhoniFinish);
+
+
+---------------------------------------------------------------------------
+
+CLASSES:
+//Class declaration:
+
+class Person{
+    constructor(name,age){
+        this.name=name;
+        this.age=age;
+    }
+    getInfo(){
+        console.log(this.name,this.age);
+    }
+}
+
+console.log(typeof Person);
+const kkr=new Person('kkr',27);
+kkr.getInfo();
+
+//Class Expression
+
+const Person=class {
+    constructor(name,age){
+        this.name=name;
+        this.age=age;
+    }
+    getInfo(){
+        console.log(this.name,this.age);
+    }
+}
+
+console.log(typeof Person);
+const kkr=new Person('kkr',27);
+kkr.getInfo();
+
+
+
