@@ -11,3 +11,25 @@ const indiaBatting=(callDhoni)=>{
     }
 }
 indiaBatting(dhoniFinish);
+
+-----------------------------
+const dhoniFinish=()=>{
+    console.log('dhoni finished in callback');
+}
+
+  const syncCallbackFunc = () => {
+    console.log("I am a Synchronous callback, Will execute immediately.");
+  };
+
+const indiaBatting=(syncCall,callDhoni)=>{
+    syncCall();
+    let overs=16.2;
+    setTimeout(()=>{
+        if(overs>16){
+        callDhoni();
+    }
+    },1000);
+    
+    console.log("hofFunction completed.");
+}
+indiaBatting(syncCallbackFunc,dhoniFinish);
