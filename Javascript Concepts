@@ -1,0 +1,13 @@
+// Callback
+
+const dhoniFinish=()=>{
+    console.log('dhoni finished in callback');
+}
+
+const indiaBatting=(callDhoni)=>{
+    let overs=16.2;
+    if(overs>16){
+        callDhoni();
+    }
+}
+indiaBatting(dhoniFinish);
