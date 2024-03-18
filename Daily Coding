@@ -413,3 +413,20 @@ for(let e of inventory){
 };
 console.log(obj);
 
+-----------------------------------------------------------------------------------------------
+
+//sorting without inbuilt functions
+
+const numbers =[12,10,15,11,14,13,16];
+let done=false;
+while(!done){
+    done=true;
+    for(let i=0;i<numbers.length;i++){
+        if(numbers[i]>numbers[i+1]){
+            done=false;
+            [numbers[i],numbers[i+1]]=[numbers[i+1],numbers[i]]
+        }
+    }
+}
+console.log(numbers);
+
