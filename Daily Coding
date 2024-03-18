@@ -430,3 +430,21 @@ while(!done){
 }
 console.log(numbers);
 
+
+---------------------------------------------------------------------------------------------
+
+//flatten Array
+const arr=[1,4,6,[3,2,1,[5,3]],7,9];
+console.log(flattenArr(arr));
+function flattenArr(arr){
+    let finalArr=[];
+    for(let i of arr){
+        if(Array.isArray(i)){
+            finalArr=[...finalArr,...flattenArr(i)];
+        }else{
+        finalArr.push(i);
+        }
+    }
+    return finalArr;
+}
+
