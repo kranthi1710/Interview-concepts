@@ -387,3 +387,29 @@ var sortPeople=function(n,h){
 const names = ["Mary","John","Emma"], heights = [180,165,170];
 console.log(sortPeople(names,heights));
 
+
+-------------------------------------------------------------------------------------------------------------------------------
+//groupBy 
+
+let items=Object.groupBy(inventory,({type}=>type);
+
+//groupBy without inbuilt functionality
+
+const inventory = [
+  { name: "asparagus", type: "vegetables", quantity: 5 },
+  { name: "bananas", type: "fruit", quantity: 0 },
+  { name: "goat", type: "meat", quantity: 23 },
+  { name: "cherries", type: "fruit", quantity: 5 },
+  { name: "fish", type: "meat", quantity: 22 },
+];
+let arr=[];
+let obj={};
+for(let e of inventory){
+    if(obj.hasOwnProperty(e.quantity)){
+        obj[e.quantity].push(e);
+    }else{
+        obj[e.quantity]=[e];
+    }
+};
+console.log(obj);
+
