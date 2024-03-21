@@ -459,3 +459,33 @@ function containsDuplicate(arr){
    return uniqueArr.length!==arr.length?true:false;
 }
 
+
+--------------------------------------------------------------------------------
+
+//Polyfill for Bind method
+let name={
+    firstName: "kranthi",
+    lastName: "reddy"
+}
+
+let printName=function (state,city){
+    console.log(this.firstName," and ",this.lastName, "and", state, city);
+}
+
+let printMyName=printName.bind(name,"tel");
+printMyName("hyd");
+
+Function.prototype.myBind=function (...args){
+    let obj=this,
+    params=args.slice(1);
+    //bind returns a function
+    return function (...args2){
+        // This function when called executes the printName function
+        // In order to call printName function, we need to have access for it inside this function
+        obj.apply(args[0],[...params,...args2]);
+    }
+}
+
+let printMyBindName=printName.myBind(name,"tel");
+printMyBindName("hyd");
+
