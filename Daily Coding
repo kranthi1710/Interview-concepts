@@ -489,3 +489,29 @@ Function.prototype.myBind=function (...args){
 let printMyBindName=printName.myBind(name,"tel");
 printMyBindName("hyd");
 
+-----------------------------------------------------------------------------------
+//Next Greater element
+
+const a = [2, 1, 5, 7, 6, 25, 9, 8];
+let next;
+for (let i = 0; i < a.length; i++) {
+    next =-1;
+  for (let j = i; j < a.length; j++) {
+    if (a[i] < a[j + 1]) {
+     next=a[j + 1];
+      break;
+    } 
+  }
+   console.log(a[i], '->', next);
+}
+
+// 2->5
+// 1->5
+// 5->7
+// 7->25
+// 6->25
+// 25->-1
+// 9->-1
+// 8->-1
+
+
