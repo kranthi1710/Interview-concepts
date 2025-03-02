@@ -1,0 +1,24 @@
+// reduce polyfill
+
+const nums=[1,2,3,4,5];
+const shipping = 99;
+const cart = [
+  { itemName: "Nike Shoes Black", price: 3499 },
+  { itemName: "U.S Polo Shirt Black", price: 2399 },
+  { itemName: "U.S Polo Trouser Gray", price: 3199 },
+];
+
+const DuplicateNumbers = [1, 1, 2, 2, 3, 4, 5, 1];
+
+let numMap=DuplicateNumbers.reduce((acc,cur)=>{
+    if(!acc.includes(cur)){
+       acc.push(cur); 
+    } 
+   return acc;
+    
+},[]);
+console.log(numMap)
+
+
+
+
