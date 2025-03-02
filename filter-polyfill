@@ -8,6 +8,12 @@ const wordArr=['abc','def','kkr'];
 let numFilter=nums.filter(num=>num<3);
 //console.log(numFilter)
 
+const DuplicateNumbers = [1, 1, 2, 2, 3, 4, 5, 1];
+
+let numfilterMap=DuplicateNumbers.filter((ele,i,arr)=>arr.indexOf(ele)===i
+);
+console.log(numfilterMap); //[ 1, 2, 3, 4, 5 ]
+
 // custom polyfill for filter
 Array.prototype.customFilter=function(callback){
     let context=this;
