@@ -1,0 +1,26 @@
+// filter polyfill
+
+const nums=[1,2,3,4,5];
+const strs=['a','b','c','d'];
+const wordArr=['abc','def','kkr'];
+
+
+let numFilter=nums.filter(num=>num<3);
+//console.log(numFilter)
+
+// custom polyfill for filter
+Array.prototype.customFilter=function(callback){
+    let context=this;
+    let temp=[];
+   for(let i=0;i<this.length;i++){
+       if(callback(this[i])){
+           temp.push(this[i]);
+       }
+   }
+   return temp; 
+}
+
+ let customFilterArr=wordArr.customFilter(str=>str==='abc');
+ console.log(customFilterArr)
+
+
