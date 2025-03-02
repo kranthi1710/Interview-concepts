@@ -17,7 +17,21 @@ let numMap=DuplicateNumbers.reduce((acc,cur)=>{
    return acc;
     
 },[]);
-console.log(numMap)
+console.log(numMap);
+
+const names = ["Jayesh", "John", "Sam", "Sam", "Jayesh", "Jayesh"];
+const totalOccurences=names.reduce((acc,cur,i,arr)=>{
+   // acc[cur]=(acc[cur]||0)+1; //short approach
+    if(acc.hasOwnProperty(cur)){
+        acc[cur]++;
+    } else{
+        acc[cur]=1;
+    } 
+    return acc;
+    
+},{})
+console.log(totalOccurences);
+// o/p { Jayesh: 3, John: 1, Sam: 2 }
 
 
 
