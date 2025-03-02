@@ -1,0 +1,25 @@
+// map polyfill
+
+const nums=[1,2,3,4,5];
+const strs=['a','b','c','d'];
+const wordArr=['abc','def','kkr'];
+
+
+let numMap=nums.map(num=>num*2);
+console.log(numMap)
+
+//custom polyfill for map
+Array.prototype.customMap=function(callback){
+    let context=this;
+    let temp=[];
+    for(let i=0;i<this.length;i++){
+        let cb=callback(this[i]); // This line is only different for filter
+        temp.push(cb);
+  }
+  return temp; 
+}
+
+ let customMapArr=nums.customMap(num=>num*2);
+ console.log(customMapArr)
+
+
