@@ -34,5 +34,31 @@ console.log(totalOccurences);
 // o/p { Jayesh: 3, John: 1, Sam: 2 }
 
 
+Array.prototype.customReduce=function(callback,initialVal){
+    const context=this;
+   
+    for(let i=0;i<this.length;i++){
+        initialVal=callback(initialVal,this[i]);
+    }
+    return initialVal;
+}
+
+let numMap=nums.customReduce((acc,cur)=>{
+    if(!acc.includes(cur)){
+      acc.push(cur); 
+    } 
+  return acc;
+    
+},[]);
+console.log(numMap);
+
+
+const total1=nums.customReduce((acc,curr)=>acc+curr,0);
+console.log("total",total1);
+
+
+
+
+
 
 
