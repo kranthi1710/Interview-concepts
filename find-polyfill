@@ -1,0 +1,35 @@
+//Array.prototype.find
+//Find is the higher order function where it returns the first value that satisfies the condition and if not found any alue, it returns undefined.
+const numbers=[2,4,7,8,9];
+const isOddNumber=(number,index,array)=>{
+   // console.log(number%2);
+    if(number%2){
+       // console.log("number",number)
+        return true
+    }
+    return false;
+}
+const res=numbers.find(isOddNumber);
+console.log("res",res);
+
+const cart=[  { id: 1, item: "Nike Shoe Black", price: 3499 },
+  { id: 2, item: "U.S Polo Shirt Black", price: 2399 },
+  { id: 3, item: "U.S Polo Trouser Gray", price: 3199 },];
+  
+  const res1=cart.find(({id})=>id===1);
+  console.log(res1);
+  
+  Array.prototype.customFind=function(cb){
+      const context=this;
+      for(let i of context){
+         if(cb(i)){
+             return i;
+         }
+      }
+  }
+  
+  const cusres=numbers.customFind(isOddNumber);
+console.log("cusres",cusres);
+
+const cusres1=cart.customFind(({id})=>id===1);
+  console.log("cusres1",cusres1);
