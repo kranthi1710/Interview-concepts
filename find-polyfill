@@ -1,5 +1,5 @@
 //Array.prototype.find
-//Find is the higher order function where it returns the first value that satisfies the condition and if not found any alue, it returns undefined.
+//Find is the higher order function where it returns the first value that satisfies the condition and if not found any value, it returns undefined.
 const numbers=[2,4,7,8,9];
 const isOddNumber=(number,index,array)=>{
    // console.log(number%2);
@@ -26,6 +26,7 @@ const cart=[  { id: 1, item: "Nike Shoe Black", price: 3499 },
              return i;
          }
       }
+return undefined;
   }
   
   const cusres=numbers.customFind(isOddNumber);
