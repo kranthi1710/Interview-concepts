@@ -1,0 +1,37 @@
+// Apply - We will apply on some objects
+
+const player1={
+    firstName: 'Kranthi',
+    lastName: 'Kumar',
+}
+
+ const getPlayerInfo=function(city,country){
+     return `${this.firstName} ${this.lastName} ${city} ${country}`;
+}
+
+
+const player2={
+    firstName:'Madhavi',
+    lastName:'vatti'
+}
+
+Function.prototype.customApply=function(...args){
+    const context=this;
+    const arguments=[...args];
+    console.log("arguments",arguments);
+     //console.log(context(...args), "and",...args);
+    for(let i of arguments){
+        if(typeof i==='object'){
+           // for(let key in i){
+              console.log("inside",i);
+           // }
+        }
+        console.log(i);
+    }
+    
+}
+
+const res=getPlayerInfo.customApply(player1,['hyd','india']);
+console.log(res);
+
+
