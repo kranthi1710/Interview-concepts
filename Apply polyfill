@@ -15,21 +15,23 @@ const player2={
     lastName:'vatti'
 }
 
-Function.prototype.customApply=function(...args){
-    const context=this;
-    const arguments=[...args];
-    console.log("arguments",arguments);
-     //console.log(context(...args), "and",...args);
-    for(let i of arguments){
-        if(typeof i==='object'){
-           // for(let key in i){
-              console.log("inside",i);
-           // }
-        }
-        console.log(i);
-    }
-    
-}
+Function.prototype.customApply = function (context, args = []) {
+ if(!Array.isArray(args)){
+     throw new Error("It is not valid");
+ }
+ let currentContext=context;
+ 
+ // Symbol()
+ let newProp=Symbol();
+ currentContext[newProp]=this;
+ let res=currentContext[newProp](...args);
+ delete currentContext[newProp];
+ return res;
+ 
+};
+
+console.log(getPlayerInfo.customApply(player1, ["Batsman", "India"]));
+console.log(getPlayerInfo.customApply(player2, ["All-Rounder", "India"]));
 
 const res=getPlayerInfo.customApply(player1,['hyd','india']);
 console.log(res);
