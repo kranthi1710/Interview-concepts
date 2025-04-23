@@ -1,0 +1,41 @@
+const getName=function(state,country,city){
+    return `${this.firstName} ${this.lastName} ${state} ${country} ${city}`
+}
+
+const person={
+    firstName:"kranthi",
+    lastName:"Reddy"
+}
+
+//Normal way
+Function.prototype.customBind=function(context,...args){
+     const currentContext=context; 
+      const newProp=Symbol();
+        currentContext[newProp]=this;
+    return function(...outerArgs){
+     const res=currentContext[newProp](...args,...outerArgs);
+     delete currentContext[newProp];
+     return res;
+    }
+}
+
+// 👉 2) Using apply method
+Function.prototype.customBind = function (context, ...args) {
+  let borrowedFunc = this;
+  return function (...outerArgs) {
+    return borrowedFunc.apply(context, [...args, ...outerArgs]);
+  };
+};
+
+// 👉 3) Using call method
+Function.prototype.customBind = function (context, ...args) {
+  let borrowedFunc = this;
+  return function (...outerArgs) {
+    return borrowedFunc.call(context, ...args, ...outerArgs);
+  };
+};
+
+const res=getName.customBind(person,"telangana","India");
+console.log(res("hyd"));
+
+
