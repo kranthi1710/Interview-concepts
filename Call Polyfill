@@ -7,9 +7,12 @@ const person={
     lastName:"Reddy"
 }
 
+
 Function.prototype.customCall=function(context,...args){
     const currentContext=context || globalThis;
+//create a new prop in person object to accomodate the getName function
    const newProp=Symbol();
+// Bring the getName function into person object and get access to this keyword
    currentContext[newProp]=this;
    const res=currentContext[newProp](...args);
    delete currentContext[newProp];
