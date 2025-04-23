@@ -1,0 +1,20 @@
+const getName=function(state,country){
+    return `${this.firstName} ${this.lastName} ${state} ${country}`
+}
+
+const person={
+    firstName:"kranthi",
+    lastName:"Reddy"
+}
+
+Function.prototype.customCall=function(context,...args){
+    const currentContext=context || globalThis;
+   const newProp=Symbol();
+   currentContext[newProp]=this;
+   const res=currentContext[newProp](...args);
+   delete currentContext[newProp];
+   return res;
+}
+const res=getName.customCall(person,"telangana","India");
+console.log(res);
+
